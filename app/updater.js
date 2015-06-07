@@ -273,8 +273,15 @@
      * @private
      */
     linux32: function(filename, cb, manifest){
-      //filename fix
-      exec('tar -zxvf "' + filename + '" >/dev/null',{cwd: os.tmpdir()}, function(err){
+      // check for zip or tar.gz for linux
+      var extension = path.extname(filename);
+      var command;
+      if (extension === '.tar.gz') {
+        command = 'tar -zxvf';
+      } else if (extension === '.zip') {
+        command = 'unzip';
+      }
+      exec(command + ' "' + filename + '" >/dev/null',{cwd: os.tmpdir()}, function(err){
         console.log(arguments);
         if(err){
           console.log(err);
